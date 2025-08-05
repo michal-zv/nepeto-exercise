@@ -12,7 +12,7 @@ def create_app():
     db.init_app(app)
 
     # blueprints
-    app.register_blueprint(product_bp, url_prefix="/api/products")
+    app.register_blueprint(product_bp, url_prefix="/api")
 
     with app.app_context():
         db.create_all()

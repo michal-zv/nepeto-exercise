@@ -4,13 +4,9 @@ from bs4 import BeautifulSoup
 import requests
 import urllib.parse
 
-# token = os.getenv("SCRAPEDO_API_TOKEN")
-token = 'e9ea3242aedc4b1da3801fd846b77637c74b81fdfae' # todo remove
+token = os.getenv("SCRAPEDO_API_TOKEN")
 base_url = "https://www.walmart.com"
-# target_url = urllib.parse.quote(f"{base_url}/search?q=bag")
-# target_url = urllib.parse.quote("https://www.walmart.com/ip/Livhil-Mesh-Beach-Bag-Rope-Handles-Mesh-Tote-Bag-for-Women-Contains-Wicker-Oversized-Beach-Tote-Bag-with-9-Small-Pockets-Black/1695385755?classType=VARIANT")
 
-# url = "http://api.scrape.do/?token={}&url={}".format(token, target_url)
 
 def set_url(query):
   target_url = urllib.parse.quote(f"{base_url}/search?q={query}")
@@ -25,9 +21,6 @@ def get_info(url):
   html_content = response.text
   soup = BeautifulSoup(html_content, 'html.parser')
 
-  # with open("page_dump.html", "w", encoding="utf-8") as f:
-  #   f.write(soup.prettify())
-
   script_tag = soup.find("script", id="__NEXT_DATA__", type="application/json")
   if not script_tag:
       raise Exception("Could not find __NEXT_DATA__ script tag")
@@ -37,23 +30,23 @@ def get_info(url):
   except json.JSONDecodeError as e:
     raise Exception(f"Failed to parse JSON: {e}")
   
-  # with open("next_data.json", "w", encoding="utf-8") as f:
-  #   json.dump(data, f, ensure_ascii=False, indent=2)
-
   items = data["props"]["pageProps"]["initialData"]["searchResult"]["itemStacks"][0]["items"]
   parsed_data = []
 
   for item in items:
-     parsed_data.append(extract_product_data(item))
-
-  # with open("test.json", "w", encoding="utf-8") as f:
-  #   json.dump(parsed_data, f, ensure_ascii=False, indent=2)
+    if item.get("__typename") == "Product":
+        parsed_data.append(extract_product_data(item))
 
   return parsed_data
 
 
 def extract_product_data(data):
     product_data = {}
+
+    # Extract product_id
+    product_id = data.get("usItemId")
+    if product_id:
+      product_data["product_id"] = product_id
 
     # Extract title
     name = data.get("name")
@@ -86,5 +79,3 @@ def extract_product_data(data):
       product_data["category"] = category["path"]
     
     return product_data
-
-# get_info(url)
