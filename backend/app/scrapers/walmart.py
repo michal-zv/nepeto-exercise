@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 import urllib.parse
 
-# token = os.getenv("SCRAPEDO_API_TOKEN")
-token = 'e9ea3242aedc4b1da3801fd846b77637c74b81fdfae' # todo remove
+token = os.getenv("SCRAPEDO_API_TOKEN")
 base_url = "https://www.walmart.com"
 # target_url = urllib.parse.quote(f"{base_url}/search?q=bag")
 # target_url = urllib.parse.quote("https://www.walmart.com/ip/Livhil-Mesh-Beach-Bag-Rope-Handles-Mesh-Tote-Bag-for-Women-Contains-Wicker-Oversized-Beach-Tote-Bag-with-9-Small-Pockets-Black/1695385755?classType=VARIANT")
