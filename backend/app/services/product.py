@@ -6,19 +6,20 @@ def create(product):
     try:
         db.session.add(product)
         db.session.commit()
+        return product
     except SQLAlchemyError:
         db.session.rollback()
         raise
-    return product
 
 def create_many(products):
     try:
+        products = [Product(**product) for product in products]
         db.session.add_all(products)
         db.session.commit()
+        return products
     except SQLAlchemyError:
         db.session.rollback()
         raise
-    return products
 
 def get_all():
     return Product.query.all()

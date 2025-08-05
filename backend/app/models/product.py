@@ -9,7 +9,7 @@ class Product(db.Model):
 
     product_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title = Column(String, nullable=False)
-    current_price = Column(Numeric, nullable=False)
+    current_price = Column(String, nullable=False)
     rating = Column(Numeric, nullable=False)
     image_url = Column(String, nullable=False)
     product_url = Column(String, nullable=False)
