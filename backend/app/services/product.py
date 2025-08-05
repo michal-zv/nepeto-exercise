@@ -2,7 +2,7 @@ from app.extensions import db
 from app.models.product import Product
 from sqlalchemy.exc import SQLAlchemyError
 
-def create_product(product):
+def create(product):
     try:
         db.session.add(product)
         db.session.commit()
@@ -11,7 +11,7 @@ def create_product(product):
         raise
     return product
 
-def create_many_products(products):
+def create_many(products):
     try:
         db.session.add_all(products)
         db.session.commit()
@@ -20,13 +20,13 @@ def create_many_products(products):
         raise
     return products
 
-def get_all_products():
+def get_all():
     return Product.query.all()
 
-def get_product_by_id(id):
+def get_by_id(id):
     return Product.query.get(id)
 
-def update_product(product, data):
+def update(product, data):
     allowed_fields = {"title", "current_price", "rating", "rating", "image_url", "product_url", "category", "created_at", "last_update"}
     # todo maybe a util func
     for key in allowed_fields:
@@ -39,7 +39,7 @@ def update_product(product, data):
         db.session.rollback()
         raise
 
-def delete_product(product):
+def delete(product):
     db.session.delete(product)
     try:
         db.session.commit()
