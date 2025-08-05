@@ -3,7 +3,6 @@ from marshmallow import ValidationError
 from app.services.product import get_all, get_by_id, create_many, update, delete
 from app.scrapers.walmart import set_url, get_info
 from app.schemas.product import ProductCreateSchema, ProductReadSchema, ProductUpdateSchema, ProductSchema
-# from app.models.product import Product
 
 product_bp = Blueprint("products", __name__)
 product_schema = ProductReadSchema(many=True)
@@ -11,8 +10,6 @@ product_schema = ProductReadSchema(many=True)
 
 @product_bp.route("/search/<string:query>", methods=["POST"])
 def create_products(query):
-    # todo check if name || item id
-
     url = set_url(query)
     data = get_info(url)
 

@@ -37,12 +37,16 @@ def get_info(url):
     if item.get("__typename") == "Product":
         parsed_data.append(extract_product_data(item))
 
-
   return parsed_data
 
 
 def extract_product_data(data):
     product_data = {}
+
+    # Extract product_id
+    product_id = data.get("usItemId")
+    if product_id:
+      product_data["product_id"] = product_id
 
     # Extract title
     name = data.get("name")

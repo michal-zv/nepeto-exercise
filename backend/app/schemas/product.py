@@ -2,6 +2,7 @@ from marshmallow import EXCLUDE, Schema, fields
 from app.models.product import Product
 
 class ProductSchema(Schema):
+    product_id = fields.Str(required=True)
     title = fields.Str(required=True)
     current_price = fields.Str(required=True)
     rating = fields.Float(required=True, as_string=True)
@@ -10,7 +11,7 @@ class ProductSchema(Schema):
     category = fields.Str()
 
     class Meta:
-        model=Product
+        model = Product
         load_instance = True
         unknown = EXCLUDE  # ignore unexpected fields
 
@@ -18,6 +19,7 @@ class ProductCreateSchema(ProductSchema):
     pass
 
 class ProductUpdateSchema(Schema):
+    product_id = fields.Str()
     title = fields.Str()
     current_price = fields.Float()
     rating = fields.Float()
@@ -26,6 +28,6 @@ class ProductUpdateSchema(Schema):
     category = fields.Str()
 
 class ProductReadSchema(ProductSchema): 
-    product_id = fields.UUID()
+    id = fields.UUID()
     created_at = fields.DateTime()
     last_update = fields.DateTime()
