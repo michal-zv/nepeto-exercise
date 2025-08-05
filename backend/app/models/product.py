@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 from sqlalchemy import Column, DateTime, Numeric, String
 from sqlalchemy.dialects.postgresql import UUID
@@ -14,5 +14,11 @@ class Product(db.Model):
     image_url = Column(String, nullable=False)
     product_url = Column(String, nullable=False)
     category = Column(String)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    last_update = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    last_update = Column(
+        DateTime,
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc)
+    )
+
