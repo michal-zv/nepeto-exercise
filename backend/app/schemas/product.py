@@ -1,5 +1,6 @@
 from marshmallow import EXCLUDE, Schema, fields
 from app.models.product import Product
+from app.schemas.product_history import ProductHistorySchema
 
 class ProductSchema(Schema):
     product_id = fields.Str(required=True)
@@ -31,3 +32,4 @@ class ProductReadSchema(ProductSchema):
     id = fields.UUID()
     created_at = fields.DateTime()
     last_update = fields.DateTime()
+    price_history = fields.Nested(ProductHistorySchema, many=True)
