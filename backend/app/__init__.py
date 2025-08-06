@@ -14,7 +14,4 @@ def create_app():
     # blueprints
     app.register_blueprint(product_bp, url_prefix="/api")
 
-    with app.app_context():
-        db.create_all()
-
     return app
