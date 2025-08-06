@@ -1,6 +1,7 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Loader from "./Loader";
 import ProductCard from "./ProductCard";
 
 export default function ProductGrid() {
@@ -27,7 +28,7 @@ export default function ProductGrid() {
       sx={{ display: "flex", justifyContent: "center" }}
     >
       {loading ? (
-        <Typography>Loading products...</Typography>
+        <Loader />
       ) : (
         products.map((product) => (
           <ProductCard key={product.id} product={product} />
