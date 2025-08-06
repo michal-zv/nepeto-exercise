@@ -1,7 +1,7 @@
 from flask import Flask
 from app.config import Config
 from app.extensions import db
-from app.models.product import Product
+import app.models
 from app.routes.product import product_bp
 
 def create_app():
@@ -13,8 +13,5 @@ def create_app():
 
     # blueprints
     app.register_blueprint(product_bp, url_prefix="/api")
-
-    with app.app_context():
-        db.create_all()
 
     return app
