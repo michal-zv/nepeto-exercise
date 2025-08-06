@@ -8,6 +8,7 @@ import {
   Modal,
   Typography,
 } from "@mui/material";
+import PriceHistoryList from "./PriceHistoryList";
 import ProductInfo from "./ProductInfo";
 
 const style = {
@@ -49,6 +50,7 @@ export default function ProductModal(props) {
         >
           Last Updated: {parseDate(product.last_update)}
         </Typography>
+        <PriceHistoryList />
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button
             variant="contained"
