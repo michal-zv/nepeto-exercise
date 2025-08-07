@@ -1,21 +1,34 @@
-import { Search } from "@mui/icons-material";
-import { InputBase, Paper } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import LaunchIcon from "@mui/icons-material/Launch";
+import SearchIcon from "@mui/icons-material/Search";
+import { IconButton, InputBase, Paper, Tooltip } from "@mui/material";
 
 const SearchBar = (props) => {
-  const { setQuery } = props;
+  const { query, setQuery, externalSearch } = props;
 
   return (
     <Paper sx={{ p: "2px 4px", display: "flex", alignItems: "center" }}>
-      <Search />
+      <SearchIcon sx={{ ml: 1 }} />
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search..."
         onChange={(e) => {
-          if (e.target.value.length !== 1) {
-            setQuery(e.target.value);
-          }
+          setQuery(e.target.value);
         }}
+        value={query}
       />
+      {query && (
+        <Tooltip title="Clear">
+          <IconButton onClick={() => setQuery("")}>
+            <ClearIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+      <Tooltip title="Search on Walmart">
+        <IconButton onClick={() => externalSearch(query)}>
+          <LaunchIcon />
+        </IconButton>
+      </Tooltip>
     </Paper>
   );
 };

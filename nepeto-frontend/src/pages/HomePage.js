@@ -29,9 +29,19 @@ const HomePage = () => {
     const response = await axios.delete(
       `${process.env.REACT_APP_API_URL}products/${id}`
     );
-    console.log(response);
     const updatedArray = products.filter((product) => product.id !== id);
-    setFilteredProducts(updatedArray);
+    setProducts(updatedArray);
+  };
+
+  // todo maybe api folder
+  // todo try/catch & success/error toast
+  const scrapeProducts = async (q) => {
+    setLoading(true); // maybe take out?
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}search/${q}`
+    );
+    setProducts((prev) => [...response.data, ...prev]);
+    setLoading(false); // maybe take out?
   };
 
   const searchInGrid = async (q) => {
@@ -62,7 +72,11 @@ const HomePage = () => {
 
   return (
     <Box>
-      <SearchBar setQuery={setQuery} />
+      <SearchBar
+        query={query}
+        setQuery={setQuery}
+        externalSearch={scrapeProducts}
+      />
       <PaginatedList
         itemsPerPage={12}
         containerProps={{
