@@ -4,10 +4,14 @@ import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import PaginatedList from "../components/PaginatedList";
 import ProductCard from "../components/ProductCard";
+import SearchBar from "../components/SearchBar";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [query, setQuery] = useState("");
 
   // todo maybe api folder
   // todo try/catch & success/error toast
@@ -27,12 +31,28 @@ const HomePage = () => {
     );
     console.log(response);
     const updatedArray = products.filter((product) => product.id !== id);
-    setProducts(updatedArray);
+    setFilteredProducts(updatedArray);
+  };
+
+  const searchInGrid = async (q) => {
+    const updatedArray = products.filter((product) =>
+      product.title.toLowerCase().includes(q.toLowerCase())
+    );
+    setFilteredProducts(updatedArray);
   };
 
   useEffect(() => {
     fetchAllProducts();
   }, []);
+
+  // todo maybe add timeout to setQuery
+  useEffect(() => {
+    if (!query) {
+      setFilteredProducts(products);
+    } else {
+      searchInGrid(query);
+    }
+  }, [query, products]);
 
   if (loading) {
     return <Loader />;
@@ -40,6 +60,7 @@ const HomePage = () => {
 
   return (
     <Box>
+      <SearchBar setQuery={setQuery} />
       <PaginatedList
         itemsPerPage={12}
         containerProps={{
@@ -50,7 +71,7 @@ const HomePage = () => {
           justifyContent: "center",
         }}
       >
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductCard
             key={product.id}
             product={product}
