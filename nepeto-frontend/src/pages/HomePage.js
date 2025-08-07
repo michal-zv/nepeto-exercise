@@ -35,8 +35,10 @@ const HomePage = () => {
   };
 
   const searchInGrid = async (q) => {
-    const updatedArray = products.filter((product) =>
-      product.title.toLowerCase().includes(q.toLowerCase())
+    const updatedArray = products.filter(
+      (product) =>
+        product.title.toLowerCase().includes(q.toLowerCase()) ||
+        product.product_id.includes(q)
     );
     setFilteredProducts(updatedArray);
   };
