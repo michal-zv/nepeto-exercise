@@ -1,13 +1,13 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { Box, Card, CardActions, IconButton } from "@mui/material";
-import { useState } from "react";
+import { Box, Card, CardActions, IconButton, Tooltip } from "@mui/material";
+import { Fragment, useState } from "react";
 import ProductInfo from "./ProductInfo";
 import ProductModal from "./ProductModal";
 
 export default function ProductCard(props) {
-  const { product } = props;
+  const { product, deleteFunc } = props;
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -15,26 +15,31 @@ export default function ProductCard(props) {
   };
 
   return (
-    <Box>
-      <Card
-        key={product.id}
-        variant="outlined"
-        sx={{ minWidth: 275, maxWidth: 400 }}
-      >
-        <ProductInfo product={product} />
-        <CardActions disableSpacing>
-          <IconButton>
-            <RefreshIcon />
-          </IconButton>
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-          <IconButton aria-label="info" onClick={handleOpen}>
-            <ReadMoreIcon />
-          </IconButton>
+    <Fragment>
+      <Card key={product.id} variant="outlined" sx={{ minWidth: 300, pb: 2 }}>
+        <CardActions sx={{ justifyContent: "space-between" }}>
+          <Tooltip title="Refresh Price">
+            <IconButton>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+          <Box>
+            <Tooltip title="More Info">
+              <IconButton onClick={handleOpen}>
+                <ReadMoreIcon />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Delete">
+              <IconButton onClick={() => deleteFunc(product.id)}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </CardActions>
+        <ProductInfo product={product} />
       </Card>
       <ProductModal product={product} isOpen={open} handleOpen={handleOpen} />
-    </Box>
+    </Fragment>
   );
 }

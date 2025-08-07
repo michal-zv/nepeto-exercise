@@ -9,12 +9,25 @@ export default function ProductGrid() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // todo maybe api folder
+  // todo try/catch & success/error toast
   const fetchAllProducts = async () => {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}products`
     );
     setProducts(response.data);
     setLoading(false); // maybe take out?
+  };
+
+  // todo maybe api folder
+  // todo try/catch & success/error toast
+  const deleteProducts = async (id) => {
+    const response = await axios.delete(
+      `${process.env.REACT_APP_API_URL}products/${id}`
+    );
+    console.log(response);
+    const updatedArray = products.filter((product) => product.id !== id);
+    setProducts(updatedArray);
   };
 
   useEffect(() => {
@@ -38,7 +51,11 @@ export default function ProductGrid() {
         }}
       >
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            deleteFunc={deleteProducts}
+          />
         ))}
       </PaginatedList>
     </Box>
