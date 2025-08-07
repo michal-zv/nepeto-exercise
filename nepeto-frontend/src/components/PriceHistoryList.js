@@ -1,6 +1,7 @@
-import HistoryIcon from "@mui/icons-material/History"; // or any relevant icon
+import HistoryIcon from "@mui/icons-material/History";
 import {
   Avatar,
+  Box,
   List,
   ListItem,
   ListItemAvatar,
@@ -19,7 +20,19 @@ export default function PriceHistoryList(props) {
   };
 
   if (prices.length === 0) {
-    return <Typography color="text.secondary">No price history</Typography>;
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        py={2}
+        color="text.secondary"
+      >
+        <HistoryIcon fontSize="large" sx={{ mb: 1 }} />
+        <Typography variant="body1">No price history found</Typography>
+      </Box>
+    );
   }
 
   return (
