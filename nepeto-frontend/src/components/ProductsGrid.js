@@ -1,7 +1,8 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
+import PaginatedList from "./PaginatedList";
 import ProductCard from "./ProductCard";
 
 export default function ProductGrid() {
@@ -20,20 +21,26 @@ export default function ProductGrid() {
     fetchAllProducts();
   }, []);
 
-  console.log(products);
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
-    <Grid
-      container
-      spacing={2}
-      sx={{ display: "flex", justifyContent: "center" }}
-    >
-      {loading ? (
-        <Loader />
-      ) : (
-        products.map((product) => (
+    <Box>
+      <PaginatedList
+        itemsPerPage={12}
+        containerProps={{
+          component: Grid,
+          container: true,
+          spacing: 2,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {products.map((product) => (
           <ProductCard key={product.id} product={product} />
-        ))
-      )}
-    </Grid>
+        ))}
+      </PaginatedList>
+    </Box>
   );
 }
