@@ -1,13 +1,5 @@
-import CloseIcon from "@mui/icons-material/Close";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import {
-  Box,
-  Button,
-  Card,
-  IconButton,
-  Modal,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, Modal, Typography } from "@mui/material";
 import PriceHistoryList from "./PriceHistoryList";
 import ProductInfo from "./ProductInfo";
 
@@ -25,10 +17,12 @@ const style = {
 export default function ProductModal(props) {
   const { product, isOpen, handleOpen } = props;
 
+  // todo util
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
   };
 
+  // todo util
   const parseDate = (rawDate) => {
     return new Date(rawDate).toLocaleString();
   };
@@ -36,21 +30,22 @@ export default function ProductModal(props) {
   return (
     <Modal open={isOpen} onClose={handleOpen}>
       <Box sx={style}>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <IconButton onClick={handleOpen}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-        <Card key={product.id} variant="outlined" sx={{ mx: "auto", mt: 2 }}>
-          <ProductInfo product={product} />
-        </Card>
         <Typography
           variant="caption"
-          sx={{ color: "text.secondary", mt: 2, textAlign: "right" }}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            color: "text.secondary",
+          }}
         >
           Last Updated: {parseDate(product.last_update)}
         </Typography>
-        <PriceHistoryList />
+        <Divider textAlign="left">MORE INFO</Divider>
+        <ProductInfo product={product} />
+
+        <Divider textAlign="left">PRICE HISTORY</Divider>
+        <PriceHistoryList prices={product.price_history} />
+        <Divider textAlign="left">ACTIONS</Divider>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button
             variant="contained"
