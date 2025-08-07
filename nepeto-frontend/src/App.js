@@ -1,13 +1,8 @@
-import { Box } from "@mui/material";
 import "./App.css";
-import ProductGrid from "./components/ProductsGrid";
+import HomePage from "./pages/HomePage";
 
 function App() {
-  return (
-    <Box>
-      <ProductGrid />
-    </Box>
-  );
+  return <HomePage />;
 }
 
 export default App;

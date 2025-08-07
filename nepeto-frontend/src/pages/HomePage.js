@@ -1,11 +1,11 @@
 import { Box, Grid } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Loader from "./Loader";
-import PaginatedList from "./PaginatedList";
-import ProductCard from "./ProductCard";
+import Loader from "../components/Loader";
+import PaginatedList from "../components/PaginatedList";
+import ProductCard from "../components/ProductCard";
 
-export default function ProductGrid() {
+const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,4 +60,6 @@ export default function ProductGrid() {
       </PaginatedList>
     </Box>
   );
-}
+};
+
+export default HomePage;
