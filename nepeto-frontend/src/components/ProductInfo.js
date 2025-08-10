@@ -1,6 +1,7 @@
 import { Box, CardContent, CardMedia, Rating, Typography } from "@mui/material";
+import PropTypes from "prop-types";
 
-export default function ProductInfo(props) {
+const ProductInfo = (props) => {
   const { product } = props;
 
   return (
@@ -29,4 +30,10 @@ export default function ProductInfo(props) {
       />
     </Box>
   );
-}
+};
+
+export default ProductInfo;
+
+ProductInfo.propTypes = {
+  product: PropTypes.object.isRequired,
+};

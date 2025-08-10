@@ -8,10 +8,11 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import PropTypes from "prop-types";
 import { Fragment } from "react";
 import PaginatedList from "./PaginatedList";
 
-export default function PriceHistoryList(props) {
+const PriceHistoryList = (props) => {
   const { prices } = props;
 
   // todo util
@@ -62,4 +63,10 @@ export default function PriceHistoryList(props) {
       </PaginatedList>
     </List>
   );
-}
+};
+
+export default PriceHistoryList;
+
+PriceHistoryList.propTypes = {
+  prices: PropTypes.array.isRequired,
+};

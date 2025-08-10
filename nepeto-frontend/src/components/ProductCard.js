@@ -2,11 +2,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { Box, Card, CardActions, IconButton, Tooltip } from "@mui/material";
+import PropTypes from "prop-types";
 import { Fragment, useState } from "react";
 import ProductInfo from "./ProductInfo";
 import ProductModal from "./ProductModal";
 
-export default function ProductCard(props) {
+const ProductCard = (props) => {
   const { product, deleteFunc } = props;
   const [open, setOpen] = useState(false);
 
@@ -42,4 +43,11 @@ export default function ProductCard(props) {
       <ProductModal product={product} isOpen={open} handleOpen={handleOpen} />
     </Fragment>
   );
-}
+};
+
+export default ProductCard;
+
+ProductCard.propTypes = {
+  product: PropTypes.object.isRequired,
+  deleteFunc: PropTypes.func.isRequired,
+};

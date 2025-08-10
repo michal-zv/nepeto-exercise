@@ -1,5 +1,6 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Box, Button, Divider, Modal, Typography } from "@mui/material";
+import PropTypes from "prop-types";
 import PriceHistoryList from "./PriceHistoryList";
 import ProductInfo from "./ProductInfo";
 
@@ -14,7 +15,7 @@ const style = {
   p: 2,
 };
 
-export default function ProductModal(props) {
+const ProductModal = (props) => {
   const { product, isOpen, handleOpen } = props;
 
   // todo util
@@ -58,4 +59,12 @@ export default function ProductModal(props) {
       </Box>
     </Modal>
   );
-}
+};
+
+export default ProductModal;
+
+ProductModal.propTypes = {
+  product: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  handleOpen: PropTypes.func.isRequired,
+};

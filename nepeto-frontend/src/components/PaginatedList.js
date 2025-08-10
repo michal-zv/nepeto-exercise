@@ -1,7 +1,8 @@
 import { Box, Pagination } from "@mui/material";
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 
-export default function PaginatedList(props) {
+const PaginatedList = (props) => {
   const { children, itemsPerPage, containerProps = {} } = props;
 
   const [page, setPage] = useState(1);
@@ -34,4 +35,12 @@ export default function PaginatedList(props) {
       </Box>
     </Box>
   );
-}
+};
+
+export default PaginatedList;
+
+PaginatedList.propTypes = {
+  children: PropTypes.node.isRequired,
+  itemsPerPage: PropTypes.number.isRequired,
+  containerProps: PropTypes.object,
+};
