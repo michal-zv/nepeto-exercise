@@ -47,8 +47,17 @@ const HomePage = () => {
     setLoading(true); // maybe take out?
     try {
       const data = await scrapeProductsByQuery(q);
-      setProducts((prev) => [...data, ...prev]);
-      toast.success("Successfully added!");
+      // todo a seperate func
+      setProducts((prev) => {
+        const combined = [...data.products, ...prev];
+        const uniqueMap = new Map();
+
+        combined.forEach((product) => uniqueMap.set(product.id, product));
+        return Array.from(uniqueMap.values());
+      });
+      toast.success(
+        `Successfully added ${data.created} new products and updated ${data.updated} existing products.`
+      );
     } catch (error) {
       toast.error(
         error.response?.data.error ?? error.message ?? "An error occurred"

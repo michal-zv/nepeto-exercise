@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from marshmallow import ValidationError
 from app.services.product import get_all, get_by_id, create_many, update, delete
 from app.scrapers.walmart import get_price, parse_product_info, get_raw_data
@@ -13,17 +13,20 @@ def create_products(query):
     try:
         data = parse_product_info(query)
     except Exception as err:
-        return jsonify({"errors": err.messages})
+        return {"message": "Something went wrong while parsing"}
 
     # validate
     try:
         validated_data = ProductCreateSchema(many=True).load(data)
     except ValidationError as err:
-        return jsonify({"errors": err.messages}), 400
+        return jsonify({"error": err.messages}), 400
     
-    products = create_many(validated_data)
-    return jsonify(product_schema.dump(products)), 200
-
+    products, created_count, updated_count = create_many(validated_data)
+    return jsonify({
+        "products": product_schema.dump(products),
+        "created": created_count,
+        "updated": updated_count
+    }), 200
 
 @product_bp.route("/products", methods=["GET"])
 def get_products():
