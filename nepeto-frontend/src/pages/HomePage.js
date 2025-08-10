@@ -5,6 +5,7 @@ import {
   deleteProductById,
   getAllProducts,
   scrapeProductsByQuery,
+  updatePriceById,
 } from "../api/product";
 import Loader from "../components/Loader";
 import PaginatedList from "../components/PaginatedList";
@@ -36,6 +37,20 @@ const HomePage = () => {
       const data = await deleteProductById(id);
       setProducts(products.filter((product) => product.id !== id));
       toast.success("Successfully deleted!");
+    } catch (error) {
+      toast.error(
+        error.response?.data.error ?? error.message ?? "An error occurred"
+      );
+    }
+  };
+
+  const refreshPrice = async (id) => {
+    try {
+      const data = await updatePriceById(id);
+      setProducts((prevProducts) =>
+        prevProducts.map((product) => (product.id === data.id ? data : product))
+      );
+      toast.success("Successfully updated!");
     } catch (error) {
       toast.error(
         error.response?.data.error ?? error.message ?? "An error occurred"
@@ -115,6 +130,7 @@ const HomePage = () => {
             key={product.id}
             product={product}
             deleteFunc={deleteProduct}
+            refreshFunc={refreshPrice}
           />
         ))}
       </PaginatedList>
