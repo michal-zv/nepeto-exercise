@@ -22,6 +22,14 @@ const style = {
 const ProductModal = (props) => {
   const { product, isOpen, handleOpen } = props;
 
+  const titleDivider = (title) => {
+    return (
+      <Divider textAlign="left" sx={{ color: "text.secondary", my: 2 }}>
+        {title}
+      </Divider>
+    );
+  };
+
   return (
     <Modal open={isOpen} onClose={handleOpen}>
       <Box sx={style}>
@@ -36,17 +44,11 @@ const ProductModal = (props) => {
         >
           Last Updated: {parseDate(product.last_update)}
         </Typography>
-        <Divider textAlign="left" sx={{ color: "text.secondary", my: 2 }}>
-          More Info
-        </Divider>
+        {titleDivider("More Info")}
         <ProductInfo product={product} />
-        <Divider textAlign="left" sx={{ color: "text.secondary", my: 2 }}>
-          Price History
-        </Divider>
+        {titleDivider("Price History")}
         <PriceHistoryList prices={product.price_history} />
-        <Divider textAlign="left" sx={{ color: "text.secondary", my: 2 }}>
-          Actions
-        </Divider>
+        {titleDivider("Actions")}
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button
             variant="contained"

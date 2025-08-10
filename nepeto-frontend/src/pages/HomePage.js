@@ -36,7 +36,9 @@ const HomePage = () => {
   const deleteProduct = async (id) => {
     try {
       const data = await deleteProductById(id);
-      setProducts(products.filter((product) => product.id !== id));
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.id !== id)
+      );
       toast.success("Successfully deleted!");
     } catch (error) {
       toast.error(
@@ -46,6 +48,7 @@ const HomePage = () => {
   };
 
   const refreshPrice = async (id) => {
+    setLoading(true);
     try {
       const data = await updatePriceById(id);
       setProducts((prevProducts) =>
@@ -56,16 +59,18 @@ const HomePage = () => {
       toast.error(
         error.response?.data.error ?? error.message ?? "An error occurred"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   const scrapeProducts = async (q) => {
-    setLoading(true); // maybe take out?
+    setLoading(true);
     try {
       const data = await scrapeProductsByQuery(q);
       // todo a seperate func
-      setProducts((prev) => {
-        const combined = [...data.products, ...prev];
+      setProducts((prevProducts) => {
+        const combined = [...data.products, ...prevProducts];
         const uniqueMap = new Map();
 
         combined.forEach((product) => uniqueMap.set(product.id, product));
@@ -79,11 +84,11 @@ const HomePage = () => {
         error.response?.data.error ?? error.message ?? "An error occurred"
       );
     } finally {
-      setLoading(false); // maybe take out?
+      setLoading(false);
     }
   };
 
-  const searchInGrid = async (q) => {
+  const searchInGrid = (q) => {
     const updatedArray = products.filter(
       (product) =>
         product.title.toLowerCase().includes(q.toLowerCase()) ||
@@ -104,11 +109,6 @@ const HomePage = () => {
       searchInGrid(query);
     }
   }, [query, products]);
-
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
     <Box>
       <SearchBar
@@ -116,6 +116,7 @@ const HomePage = () => {
         setQuery={setQuery}
         externalSearch={scrapeProducts}
       />
+      <Loader isOpen={loading} />
       {filteredProducts.length === 0 ? (
         <Box
           sx={{
@@ -140,6 +141,7 @@ const HomePage = () => {
             spacing: 3,
             display: "flex",
             justifyContent: "center",
+            columns: { xs: 12, sm: 6, md: 4, lg: 3 },
             sx: {
               padding: 2,
               margin: "0 auto",
@@ -147,7 +149,7 @@ const HomePage = () => {
           }}
         >
           {filteredProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+            <Grid key={product.id}>
               <ProductCard
                 key={product.id}
                 product={product}
