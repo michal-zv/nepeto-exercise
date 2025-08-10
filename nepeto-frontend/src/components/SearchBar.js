@@ -8,10 +8,19 @@ const SearchBar = (props) => {
   const { query, setQuery, externalSearch } = props;
 
   return (
-    <Paper sx={{ p: "2px 4px", display: "flex", alignItems: "center" }}>
-      <SearchIcon sx={{ ml: 1 }} />
+    <Paper
+      sx={{
+        p: "4px 8px",
+        display: "flex",
+        alignItems: "center",
+        borderRadius: 2,
+        maxWidth: 600,
+        margin: "auto",
+      }}
+    >
+      <SearchIcon color="action" sx={{ mx: 1 }} />
       <InputBase
-        sx={{ ml: 1, flex: 1 }}
+        sx={{ ml: 1, flex: 1, fontSize: 16 }}
         placeholder="Search..."
         onChange={(e) => {
           setQuery(e.target.value);
@@ -20,13 +29,19 @@ const SearchBar = (props) => {
       />
       {query && (
         <Tooltip title="Clear">
-          <IconButton onClick={() => setQuery("")}>
+          <IconButton onClick={() => setQuery("")} size="small" color="inherit">
             <ClearIcon />
           </IconButton>
         </Tooltip>
       )}
       <Tooltip title="Search on Walmart">
-        <IconButton onClick={() => externalSearch(query)}>
+        <IconButton
+          onClick={() => externalSearch(query.trim())}
+          size="small"
+          color="primary"
+          sx={{ ml: 1 }}
+          disabled={!query.trim()}
+        >
           <LaunchIcon />
         </IconButton>
       </Tooltip>

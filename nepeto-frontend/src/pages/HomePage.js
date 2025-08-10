@@ -1,3 +1,4 @@
+import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import { Box, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -115,25 +116,48 @@ const HomePage = () => {
         setQuery={setQuery}
         externalSearch={scrapeProducts}
       />
-      <PaginatedList
-        itemsPerPage={12}
-        containerProps={{
-          component: Grid,
-          container: true,
-          spacing: 2,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        {filteredProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            deleteFunc={deleteProduct}
-            refreshFunc={refreshPrice}
-          />
-        ))}
-      </PaginatedList>
+      {filteredProducts.length === 0 ? (
+        <Box
+          sx={{
+            mt: 4,
+            textAlign: "center",
+            color: "text.secondary",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <ProductionQuantityLimitsIcon fontSize="large" />
+          No products found. Try a different search or add new products.
+        </Box>
+      ) : (
+        <PaginatedList
+          itemsPerPage={6}
+          containerProps={{
+            component: Grid,
+            container: true,
+            spacing: 3,
+            display: "flex",
+            justifyContent: "center",
+            sx: {
+              padding: 2,
+              margin: "0 auto",
+            },
+          }}
+        >
+          {filteredProducts.map((product) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+              <ProductCard
+                key={product.id}
+                product={product}
+                deleteFunc={deleteProduct}
+                refreshFunc={refreshPrice}
+              />
+            </Grid>
+          ))}
+        </PaginatedList>
+      )}
     </Box>
   );
 };

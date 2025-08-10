@@ -17,7 +17,18 @@ const ProductCard = (props) => {
 
   return (
     <Fragment>
-      <Card key={product.id} variant="outlined" sx={{ minWidth: 300, pb: 2 }}>
+      <Card
+        key={product.id}
+        variant="outlined"
+        sx={{
+          minWidth: 300,
+          maxWidth: 570,
+          minHeight: 300,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
         <CardActions sx={{ justifyContent: "space-between" }}>
           <Tooltip title="Refresh Price">
             <IconButton onClick={() => refreshFunc(product.id)}>
@@ -38,7 +49,9 @@ const ProductCard = (props) => {
             </Tooltip>
           </Box>
         </CardActions>
-        <ProductInfo product={product} />
+        <Box sx={{ flexGrow: 1, overflow: "auto", px: 2 }}>
+          <ProductInfo product={product} />
+        </Box>
       </Card>
       <ProductModal product={product} isOpen={open} handleOpen={handleOpen} />
     </Fragment>

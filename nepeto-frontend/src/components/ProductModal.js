@@ -10,9 +10,11 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 450,
+  maxHeight: "80vh",
   bgcolor: "background.paper",
   boxShadow: 24,
-  p: 2,
+  p: 3,
+  overflowY: "auto",
 };
 
 const ProductModal = (props) => {
@@ -37,16 +39,22 @@ const ProductModal = (props) => {
             display: "flex",
             justifyContent: "flex-end",
             color: "text.secondary",
+            mb: 1,
           }}
         >
           Last Updated: {parseDate(product.last_update)}
         </Typography>
-        <Divider textAlign="left">MORE INFO</Divider>
+        <Divider textAlign="left" sx={{ color: "text.secondary", my: 2 }}>
+          More Info
+        </Divider>
         <ProductInfo product={product} />
-
-        <Divider textAlign="left">PRICE HISTORY</Divider>
+        <Divider textAlign="left" sx={{ color: "text.secondary", my: 2 }}>
+          Price History
+        </Divider>
         <PriceHistoryList prices={product.price_history} />
-        <Divider textAlign="left">ACTIONS</Divider>
+        <Divider textAlign="left" sx={{ color: "text.secondary", my: 2 }}>
+          Actions
+        </Divider>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           <Button
             variant="contained"
