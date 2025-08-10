@@ -1,6 +1,8 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Box, Button, Divider, Modal, Typography } from "@mui/material";
 import PropTypes from "prop-types";
+import { parseDate } from "../utils/dateUtils";
+import { openInNewTab } from "../utils/windowUtils";
 import PriceHistoryList from "./PriceHistoryList";
 import ProductInfo from "./ProductInfo";
 
@@ -19,16 +21,6 @@ const style = {
 
 const ProductModal = (props) => {
   const { product, isOpen, handleOpen } = props;
-
-  // todo util
-  const openInNewTab = (url) => {
-    window.open(url, "_blank", "noreferrer");
-  };
-
-  // todo util
-  const parseDate = (rawDate) => {
-    return new Date(rawDate).toLocaleString();
-  };
 
   return (
     <Modal open={isOpen} onClose={handleOpen}>

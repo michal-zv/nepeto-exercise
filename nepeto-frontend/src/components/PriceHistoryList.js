@@ -10,15 +10,11 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
+import { parseDate } from "../utils/dateUtils";
 import PaginatedList from "./PaginatedList";
 
 const PriceHistoryList = (props) => {
   const { prices } = props;
-
-  // todo util
-  const parseDate = (rawDate) => {
-    return new Date(rawDate).toLocaleString();
-  };
 
   if (prices.length === 0) {
     return (
