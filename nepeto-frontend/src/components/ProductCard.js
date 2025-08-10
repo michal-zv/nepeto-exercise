@@ -8,7 +8,7 @@ import ProductInfo from "./ProductInfo";
 import ProductModal from "./ProductModal";
 
 const ProductCard = (props) => {
-  const { product, deleteFunc } = props;
+  const { product, deleteFunc, refreshFunc } = props;
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -20,7 +20,7 @@ const ProductCard = (props) => {
       <Card key={product.id} variant="outlined" sx={{ minWidth: 300, pb: 2 }}>
         <CardActions sx={{ justifyContent: "space-between" }}>
           <Tooltip title="Refresh Price">
-            <IconButton>
+            <IconButton onClick={() => refreshFunc(product.id)}>
               <RefreshIcon />
             </IconButton>
           </Tooltip>
@@ -50,4 +50,5 @@ export default ProductCard;
 ProductCard.propTypes = {
   product: PropTypes.object.isRequired,
   deleteFunc: PropTypes.func.isRequired,
+  refreshFunc: PropTypes.func.isRequired,
 };

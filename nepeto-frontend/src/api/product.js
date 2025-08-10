@@ -16,3 +16,8 @@ export const scrapeProductsByQuery = async (q) => {
   const res = await axios.post(`${API_URL}search/${q}`);
   return res.data;
 };
+
+export const updatePriceById = async (id) => {
+  const res = await axios.put(`${API_URL}products/${id}`);
+  return res.data;
+};

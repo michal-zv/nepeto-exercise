@@ -5,6 +5,7 @@ import {
   deleteProductById,
   getAllProducts,
   scrapeProductsByQuery,
+  updatePriceById,
 } from "../api/product";
 import Loader from "../components/Loader";
 import PaginatedList from "../components/PaginatedList";
@@ -43,12 +44,35 @@ const HomePage = () => {
     }
   };
 
+  const refreshPrice = async (id) => {
+    try {
+      const data = await updatePriceById(id);
+      setProducts((prevProducts) =>
+        prevProducts.map((product) => (product.id === data.id ? data : product))
+      );
+      toast.success("Successfully updated!");
+    } catch (error) {
+      toast.error(
+        error.response?.data.error ?? error.message ?? "An error occurred"
+      );
+    }
+  };
+
   const scrapeProducts = async (q) => {
     setLoading(true); // maybe take out?
     try {
       const data = await scrapeProductsByQuery(q);
-      setProducts((prev) => [...data, ...prev]);
-      toast.success("Successfully added!");
+      // todo a seperate func
+      setProducts((prev) => {
+        const combined = [...data.products, ...prev];
+        const uniqueMap = new Map();
+
+        combined.forEach((product) => uniqueMap.set(product.id, product));
+        return Array.from(uniqueMap.values());
+      });
+      toast.success(
+        `Successfully added ${data.created} new products and updated ${data.updated} existing products.`
+      );
     } catch (error) {
       toast.error(
         error.response?.data.error ?? error.message ?? "An error occurred"
@@ -106,6 +130,7 @@ const HomePage = () => {
             key={product.id}
             product={product}
             deleteFunc={deleteProduct}
+            refreshFunc={refreshPrice}
           />
         ))}
       </PaginatedList>
