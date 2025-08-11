@@ -1,6 +1,6 @@
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import { Box, Grid } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   deleteProductById,
@@ -83,19 +83,6 @@ const HomePage = () => {
     }
   };
 
-  const searchInGrid = useCallback(
-    (query) => {
-      const lower = query.toLowerCase();
-      const updatedArray = products.filter(
-        (product) =>
-          product.title.toLowerCase().includes(lower) ||
-          product.product_id.includes(query)
-      );
-      setFilteredProducts(updatedArray);
-    },
-    [products]
-  );
-
   useEffect(() => {
     fetchAllProducts();
   }, []);
@@ -105,14 +92,19 @@ const HomePage = () => {
       if (!query) {
         setFilteredProducts(products);
       } else {
-        searchInGrid(query);
+        const lower = query.toLowerCase();
+        setFilteredProducts(
+          products.filter(
+            (product) =>
+              product.title.toLowerCase().includes(lower) ||
+              product.product_id.includes(query)
+          )
+        );
       }
-    }, 500);
+    }, 300);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [query, products, searchInGrid]);
+    return () => clearTimeout(handler);
+  }, [query, products]);
 
   return (
     <Box>
