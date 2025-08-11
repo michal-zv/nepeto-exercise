@@ -10,11 +10,18 @@ base_url = "https://www.walmart.com"
 
 
 def set_url(query):
+  """
+  Set target URL with Walmart & query in scraper URL.
+  """
   target_url = urllib.parse.quote(f"{base_url}/search?q={query}")
   return "http://api.scrape.do/?token={}&url={}".format(token, target_url)
 
 
 def get_raw_data(url):
+  """
+  Scrape Walmart from the url.
+  Returns JSON with all the raw data.
+  """
   current_app.logger.info(f"Fetching URL: {url}")
   
   try:
@@ -41,7 +48,12 @@ def get_raw_data(url):
 
   return data
 
+
 def parse_product_info(query):
+  """
+  Accesses Walmart and gets info by query.
+  Returns list of parsed products.
+  """
   url = set_url(query)
   raw_data = get_raw_data(url)
 
@@ -54,18 +66,27 @@ def parse_product_info(query):
   
   return parsed_data
 
-def get_price(pid):
-  url = set_url(pid)
+
+def get_price(product_id):
+  """
+  Returns product price by product_id from Walmart.
+  """
+  url = set_url(product_id)
   raw_data = get_raw_data(url)
 
   res = raw_data["props"]["pageProps"]["initialData"]["searchResult"]["itemStacks"][0]["items"]
-  item = next((x for x in res if x.get("usItemId") == pid), None)
+  item = next((x for x in res if x.get("usItemId") == product_id), None)
   
   price_info = item.get("priceInfo")
   if price_info and price_info.get("linePrice") is not None:
     return price_info["linePrice"]
 
+
 def extract_product_data(data):
+    """
+    Extracts from data JSON the needed fields.
+    Returns object with necessary info (Product).
+    """
     product_data = {}
 
     # Extract product_id
