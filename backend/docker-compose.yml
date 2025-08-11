@@ -1,26 +1,25 @@
-version: "3.8"
-
 services:
   db:
     image: cockroachdb/cockroach:v25.2.4
     container_name: cockroachdb
-    command: start-single-node --insecure --store=/cockroach/cockroach-data
+    command: start-single-node --insecure --store=/cockroach/cockroach-data --http-port=8080
     ports:
-      - "26257:26257"  # SQL port
-      - "8080:8080"    # Admin UI
+      - "26257:26257"
+      - "8080:8080"
     volumes:
       - cockroach-data:/cockroach/cockroach-data
+    environment:
+      - COCKROACH_MAX_OFFSET=500ms
 
-  db-init:
-    image: cockroachdb/cockroach:v25.2.4
+  backend:
+    build: .
+    container_name: flask-backend
     depends_on:
       - db
-    entrypoint:
-      - /bin/bash
-      - -c
-      - |
-        sleep 5
-        cockroach sql --insecure --host=db -e "CREATE DATABASE IF NOT EXISTS nepeto_exercise;"
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.env
 
 volumes:
   cockroach-data:
