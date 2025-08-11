@@ -3,6 +3,7 @@ import os
 from bs4 import BeautifulSoup
 import requests
 import urllib.parse
+from flask import current_app
 
 token = os.getenv("SCRAPEDO_API_TOKEN")
 base_url = "https://www.walmart.com"
@@ -14,18 +15,28 @@ def set_url(query):
 
 
 def get_raw_data(url):
-  response = requests.get(url)
-  response.raise_for_status()
-
+  current_app.logger.info(f"Fetching URL: {url}")
+  
+  try:
+    response = requests.get(url)
+    response.raise_for_status()
+    current_app.logger.info(f"Successfully fetched URL: {url}")
+  except requests.RequestException as e:
+    current_app.logger.error(f"Request failed for URL {url}: {e}")
+    raise
+  
   soup = BeautifulSoup(response.text, 'html.parser')
 
   script_tag = soup.find("script", id="__NEXT_DATA__", type="application/json")
   if not script_tag:
-      raise Exception("Could not find __NEXT_DATA__ script tag")
+    current_app.logger.error(f"__NEXT_DATA__ script tag not found at URL: {url}")
+    raise Exception("Could not find __NEXT_DATA__ script tag")
 
   try:
     data = json.loads(script_tag.string)
+    current_app.logger.info(f"JSON parsed successfully for URL: {url}")
   except json.JSONDecodeError as e:
+    current_app.logger.error(f"Failed to parse JSON from {url}: {e}")
     raise Exception(f"Failed to parse JSON: {e}") from e
 
   return data
