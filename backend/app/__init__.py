@@ -5,6 +5,7 @@ from app.extensions import db as sqlalchemy_db
 import app.models
 from app.routes.product import product_bp
 from app.db.utils import create_db_if_not_exists
+from app.logger import setup_logger
 
 def create_app():
     app = Flask(__name__)
@@ -20,5 +21,7 @@ def create_app():
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     app.register_blueprint(product_bp, url_prefix="/api")
+
+    setup_logger(app)
 
     return app
