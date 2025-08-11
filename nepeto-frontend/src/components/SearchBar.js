@@ -14,7 +14,7 @@ const SearchBar = (props) => {
         display: "flex",
         alignItems: "center",
         borderRadius: 2,
-        maxWidth: 600,
+        maxWidth: 500,
         margin: "auto",
       }}
     >

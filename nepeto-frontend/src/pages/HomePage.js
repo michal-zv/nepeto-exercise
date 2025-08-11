@@ -134,7 +134,7 @@ const HomePage = () => {
         </Box>
       ) : (
         <PaginatedList
-          itemsPerPage={6}
+          itemsPerPage={8}
           containerProps={{
             component: Grid,
             container: true,

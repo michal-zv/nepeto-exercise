@@ -30,6 +30,31 @@ const ProductModal = (props) => {
     );
   };
 
+  const openInWalmartButton = (
+    <Button
+      variant="outlined"
+      startIcon={<OpenInNewIcon />}
+      onClick={() => openInNewTab(product.product_url)}
+      sx={{
+        textTransform: "none",
+        fontWeight: 600,
+        borderRadius: 2,
+        px: 2,
+        py: 1,
+        color: "primary.main",
+        borderColor: "primary.main",
+        "&:hover": {
+          backgroundColor: "primary.main",
+          color: "white",
+          borderColor: "primary.main",
+          boxShadow: "0 4px 10px rgba(25, 118, 210, 0.3)",
+        },
+      }}
+    >
+      Open in Walmart
+    </Button>
+  );
+
   return (
     <Modal open={isOpen} onClose={handleOpen}>
       <Box sx={style}>
@@ -50,13 +75,7 @@ const ProductModal = (props) => {
         <PriceHistoryList prices={product.price_history} />
         {titleDivider("Actions")}
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-          <Button
-            variant="contained"
-            startIcon={<OpenInNewIcon />}
-            onClick={() => openInNewTab(product.product_url)}
-          >
-            Open In Walmart
-          </Button>
+          {openInWalmartButton}
         </Box>
       </Box>
     </Modal>

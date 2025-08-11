@@ -1,4 +1,5 @@
 import CategoryIcon from "@mui/icons-material/Category";
+import SellIcon from "@mui/icons-material/Sell";
 import {
   Box,
   CardContent,
@@ -22,10 +23,12 @@ const ProductInfo = (props) => {
           minHeight: 200,
         }}
       >
-        <Typography variant="overline" sx={{ color: "text.secondary" }}>
+        <Typography variant="overline" color="text.secondary">
           item id: {product.product_id}
         </Typography>
-        <Typography variant="h6">{product.title}</Typography>
+        <Typography variant="body1" fontWeight="bold">
+          {product.title}
+        </Typography>
         {product.category != null && (
           <Chip
             icon={<CategoryIcon />}
@@ -41,13 +44,26 @@ const ProductInfo = (props) => {
             precision={0.1}
             readOnly
           />
-          <Typography variant="caption" sx={{ color: "text.secondary" }}>
+          <Typography variant="caption" color="text.secondary">
             {product.rating}
           </Typography>
         </Box>
-        <Typography variant="subtitle1" sx={{ marginTop: "auto" }}>
-          Current Price: {product.current_price}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+            marginTop: "auto",
+          }}
+        >
+          <Typography variant="body1" color="text.secondary">
+            Sold now for
+          </Typography>
+          <Typography variant="body1" fontWeight="bold" color="primary.main">
+            {product.current_price}
+          </Typography>
+          <SellIcon fontSize="small" sx={{ color: "primary.main" }} />
+        </Box>
       </CardContent>
       <CardMedia
         component="img"
