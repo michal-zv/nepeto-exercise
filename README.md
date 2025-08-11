@@ -27,3 +27,6 @@ or
 ```bash
 docker-compose up
 ```
+
+## Accessing the Application
+Once the project is running, open your browser and go to http://localhost:3000/
