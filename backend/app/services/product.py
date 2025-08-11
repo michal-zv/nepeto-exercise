@@ -3,6 +3,9 @@ from app.models.product import Product
 from sqlalchemy.exc import SQLAlchemyError
 
 def create(product, commit=True):
+    """
+    Creates new product in DB.
+    """
     try:
         db.session.add(product)
         if commit:
@@ -12,10 +15,19 @@ def create(product, commit=True):
         db.session.rollback()
         raise
 
+
 def create_many(data):
+    """
+    Inserts many products to DB.
+    Checks if product exists, then upserts.
+    If not, adds new product.
+    Returns all products that were created/updated, 
+    and how many were created/updated.
+    """
     results = []
     created_count = 0
     updated_count = 0
+
 
     try:
         for item in data:
@@ -31,13 +43,26 @@ def create_many(data):
         db.session.rollback()
         raise
 
+
 def get_all():
+    """
+    Returns all products from DB.
+    """
     return Product.query.all()
 
+
 def get_by_id(id):
+    """
+    Returns product by id.
+    """
     return Product.query.get(id)
 
+
 def update(product, data, commit=True):
+    """
+    Updates product. Checks if needs to commit.
+    Returns updated product.
+    """
     allowed_fields = {"title", "current_price", "rating", "rating", "image_url", "product_url", "category", "created_at", "last_update"}
     for key in allowed_fields:
       if key in data:
@@ -50,7 +75,11 @@ def update(product, data, commit=True):
         db.session.rollback()
         raise
 
+
 def delete(product):
+    """
+    Deletes product.
+    """
     db.session.delete(product)
     try:
         db.session.commit()
@@ -77,4 +106,7 @@ def upsert(data):
 
 
 def get_by_product_id(product_id):
+    """
+    Returns product by product_id.
+    """
     return Product.query.filter_by(product_id=product_id).first()
