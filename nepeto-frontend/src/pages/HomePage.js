@@ -12,6 +12,7 @@ import Loader from "../components/Loader";
 import PaginatedList from "../components/PaginatedList";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
+import { handleErrorToast } from "../utils/toastUtils";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -19,12 +20,6 @@ const HomePage = () => {
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [query, setQuery] = useState("");
-
-  const handleErrorToast = (error) => {
-    toast.error(
-      error?.response?.data?.error ?? error?.message ?? "An error occurred"
-    );
-  };
 
   const fetchAllProducts = async () => {
     try {
