@@ -6,24 +6,21 @@
    ```bash
    git clone https://github.com/michal-zv/nepeto-exercise
    cd nepeto-exercise
+   ```
 
-2. Create the .env files in the following locations:
-- Backend: nepeto-exercise/backend/.env
-- Frontend: nepeto-exercise/nepeto-frontend/.env
+2. Create .env file in the following locations:
+- nepeto-exercise/backend/.env
 
-3. Copy the contents of the .env files from the ZIP file provided into the respective locations.
+3. Copy the contents of the .env file from the ZIP file provided into the new file location.
 
 
 ## Running the Project
 
 To build and start the application, run the following command:
-
 ```bash
 docker compose up
 ```
-
-or 
-
+or
 ```bash
 docker-compose up
 ```

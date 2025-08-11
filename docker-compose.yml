@@ -26,13 +26,13 @@ services:
     build:
       context: ./nepeto-frontend
       dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: http://localhost:5000/api/
     container_name: react-frontend
     depends_on:
       - backend
     ports:
       - "3000:80"
-    env_file:
-      - ./nepeto-frontend/.env
 
 volumes:
   cockroach-data:
