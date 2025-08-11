@@ -67,7 +67,7 @@ const HomePage = () => {
   const scrapeProducts = async (q) => {
     setLoading(true);
     try {
-      const data = await scrapeProductsByQuery(q);
+      const data = (await scrapeProductsByQuery(q)) || [];
       // todo a seperate func
       setProducts((prevProducts) => {
         const combined = [...data.products, ...prevProducts];

@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify
 from marshmallow import ValidationError
 from app.services.product import get_all, get_by_id, create_many, update, delete
-from app.scrapers.walmart import get_price, parse_product_info, get_raw_data
-from app.schemas.product import ProductCreateSchema, ProductReadSchema, ProductUpdateSchema, ProductSchema
+from app.scrapers.walmart import get_price, parse_product_info
+from app.schemas.product import ProductCreateSchema, ProductReadSchema, ProductUpdateSchema
 
 product_bp = Blueprint("products", __name__)
 product_schema = ProductReadSchema(many=True)
@@ -13,7 +13,7 @@ def create_products(query):
     try:
         data = parse_product_info(query)
     except Exception as err:
-        return {"message": "Something went wrong while parsing"}
+        return {"message": "Something went wrong while parsing"}, 500
 
     # validate
     try:
