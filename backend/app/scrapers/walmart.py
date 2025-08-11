@@ -13,13 +13,11 @@ def set_url(query):
   return "http://api.scrape.do/?token={}&url={}".format(token, target_url)
 
 
-def get_info(url):
+def get_raw_data(url):
   response = requests.get(url)
   response.raise_for_status()
 
-  # Get the clean HTML content from the response
-  html_content = response.text
-  soup = BeautifulSoup(html_content, 'html.parser')
+  soup = BeautifulSoup(response.text, 'html.parser')
 
   script_tag = soup.find("script", id="__NEXT_DATA__", type="application/json")
   if not script_tag:
@@ -28,17 +26,33 @@ def get_info(url):
   try:
     data = json.loads(script_tag.string)
   except json.JSONDecodeError as e:
-    raise Exception(f"Failed to parse JSON: {e}")
-  
-  items = data["props"]["pageProps"]["initialData"]["searchResult"]["itemStacks"][0]["items"]
+    raise Exception(f"Failed to parse JSON: {e}") from e
+
+  return data
+
+def parse_product_info(query):
+  url = set_url(query)
+  raw_data = get_raw_data(url)
+
+  items = raw_data["props"]["pageProps"]["initialData"]["searchResult"]["itemStacks"][0]["items"]
   parsed_data = []
 
   for item in items:
     if item.get("__typename") == "Product":
         parsed_data.append(extract_product_data(item))
-
+  
   return parsed_data
 
+def get_price(pid):
+  url = set_url(pid)
+  raw_data = get_raw_data(url)
+
+  res = raw_data["props"]["pageProps"]["initialData"]["searchResult"]["itemStacks"][0]["items"]
+  item = next((x for x in res if x.get("usItemId") == pid), None)
+  
+  price_info = item.get("priceInfo")
+  if price_info and price_info.get("linePrice") is not None:
+    return price_info["linePrice"]
 
 def extract_product_data(data):
     product_data = {}

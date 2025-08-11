@@ -10,7 +10,7 @@ class Product(db.Model):
     __tablename__ = "products"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    product_id = Column(String, nullable=False) # todo maybe should be unique?
+    product_id = Column(String, nullable=False, unique=True)
     title = Column(String, nullable=False)
     current_price = Column(String, nullable=False)
     rating = Column(Numeric, nullable=False)

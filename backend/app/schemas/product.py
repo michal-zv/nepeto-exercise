@@ -22,7 +22,7 @@ class ProductCreateSchema(ProductSchema):
 class ProductUpdateSchema(Schema):
     product_id = fields.Str()
     title = fields.Str()
-    current_price = fields.Float()
+    current_price = fields.Str()
     rating = fields.Float()
     image_url = fields.Str()
     product_url = fields.Str()
