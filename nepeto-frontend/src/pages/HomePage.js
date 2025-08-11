@@ -1,6 +1,6 @@
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import { Box, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   deleteProductById,
@@ -20,14 +20,18 @@ const HomePage = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [query, setQuery] = useState("");
 
+  const handleErrorToast = (error) => {
+    toast.error(
+      error?.response?.data?.error ?? error?.message ?? "An error occurred"
+    );
+  };
+
   const fetchAllProducts = async () => {
     try {
       const data = await getAllProducts();
       setProducts(data);
     } catch (error) {
-      toast.error(
-        error.response?.data.error ?? error.message ?? "An error occurred"
-      );
+      handleErrorToast(error);
     } finally {
       setLoading(false);
     }
@@ -35,15 +39,13 @@ const HomePage = () => {
 
   const deleteProduct = async (id) => {
     try {
-      const data = await deleteProductById(id);
+      await deleteProductById(id);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.id !== id)
       );
       toast.success("Successfully deleted!");
     } catch (error) {
-      toast.error(
-        error.response?.data.error ?? error.message ?? "An error occurred"
-      );
+      handleErrorToast(error);
     }
   };
 
@@ -56,23 +58,23 @@ const HomePage = () => {
       );
       toast.success("Successfully updated!");
     } catch (error) {
-      toast.error(
-        error.response?.data.error ?? error.message ?? "An error occurred"
-      );
+      handleErrorToast(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const scrapeProducts = async (q) => {
+  const scrapeProducts = async (query) => {
     setLoading(true);
     try {
-      const data = (await scrapeProductsByQuery(q)) || [];
-      // todo a seperate func
+      const data = (await scrapeProductsByQuery(query)) || {
+        products: [],
+        created: 0,
+        updated: 0,
+      };
       setProducts((prevProducts) => {
         const combined = [...data.products, ...prevProducts];
         const uniqueMap = new Map();
-
         combined.forEach((product) => uniqueMap.set(product.id, product));
         return Array.from(uniqueMap.values());
       });
@@ -80,35 +82,43 @@ const HomePage = () => {
         `Successfully added ${data.created} new products and updated ${data.updated} existing products.`
       );
     } catch (error) {
-      toast.error(
-        error.response?.data.error ?? error.message ?? "An error occurred"
-      );
+      handleErrorToast(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const searchInGrid = (q) => {
-    const updatedArray = products.filter(
-      (product) =>
-        product.title.toLowerCase().includes(q.toLowerCase()) ||
-        product.product_id.includes(q)
-    );
-    setFilteredProducts(updatedArray);
-  };
+  const searchInGrid = useCallback(
+    (query) => {
+      const lower = query.toLowerCase();
+      const updatedArray = products.filter(
+        (product) =>
+          product.title.toLowerCase().includes(lower) ||
+          product.product_id.includes(query)
+      );
+      setFilteredProducts(updatedArray);
+    },
+    [products]
+  );
 
   useEffect(() => {
     fetchAllProducts();
   }, []);
 
-  // todo maybe add timeout to setQuery
   useEffect(() => {
-    if (!query) {
-      setFilteredProducts(products);
-    } else {
-      searchInGrid(query);
-    }
-  }, [query, products]);
+    const handler = setTimeout(() => {
+      if (!query) {
+        setFilteredProducts(products);
+      } else {
+        searchInGrid(query);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query, products, searchInGrid]);
+
   return (
     <Box>
       <SearchBar
@@ -151,7 +161,6 @@ const HomePage = () => {
           {filteredProducts.map((product) => (
             <Grid key={product.id}>
               <ProductCard
-                key={product.id}
                 product={product}
                 deleteFunc={deleteProduct}
                 refreshFunc={refreshPrice}
