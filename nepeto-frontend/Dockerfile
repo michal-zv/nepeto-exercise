@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+# Accept build arguments for configuration
+ARG REACT_APP_API_URL=http://localhost:5000/api
+
 # Build for production
 RUN npm run build
 
