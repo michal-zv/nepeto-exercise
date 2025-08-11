@@ -17,7 +17,9 @@ class ProductSchema(Schema):
         unknown = EXCLUDE  # ignore unexpected fields
 
 class ProductCreateSchema(ProductSchema):
-    pass
+    rating = fields.Float(load_default=0.0)
+    image_url = fields.Str(load_default=None)
+    product_url = fields.Str(load_default=None)
 
 class ProductUpdateSchema(Schema):
     product_id = fields.Str()
