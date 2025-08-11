@@ -9,4 +9,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Copy and set execute permission for the entrypoint script
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
+# Use the entrypoint script to run migrations then start Flask
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
